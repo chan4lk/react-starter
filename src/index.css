@@ -2,7 +2,16 @@ body {
   margin: 50;
   padding: 50;
   font-family: sans-serif;
+  font-size: 40px;
 }
+input {
+  font-size: 30px;
+}
+button{
+  font-size: 30px;
+  margin-left: 10px;
+}
+
 
 #root {
   margin: 0 auto;

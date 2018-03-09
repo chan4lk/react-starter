@@ -11,7 +11,7 @@ class ToDo extends React.Component {
     }
 
     onAdd(e) {
-        
+        e.preventDefault();
         if (this.input.value) {
             this.props.addTodo(
                 {
@@ -29,10 +29,11 @@ class ToDo extends React.Component {
     render() {
         return (
             <div>
-                <div>
+                <h1>Todo List</h1>
+                <form>
                     <input type="text" ref={node => { this.input = node }} />
                     <button onClick={this.onAdd}>Add</button>
-                </div>
+                </form>
                 <ToDoList todos={this.props.todos} onCompleted={this.onCompleted} />
             </div>);
     }
