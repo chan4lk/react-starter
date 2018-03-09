@@ -1,55 +1,49 @@
 import * as React from 'react';
-
+import { connect } from 'react-redux';
+import actionTypes from '../actions/action-types';
+import { addTodo, completeTodo } from '../actions/todo-actions';
+import ToDoList from './ToDoList';
 class ToDo extends React.Component {
     constructor() {
         super();
-        this.state = {            
-            todos: [
-                {text:'Add Todo', completed: false},
-                {text:'Delete Todo', completed: false},
-                {text:'Complete Todo', completed: false}
-               
-            ]
-        };
         this.onAdd = this.onAdd.bind(this);
         this.onCompleted = this.onCompleted.bind(this);
     }
 
     onAdd(e) {
-        e.preventDefault();
+        
         if (this.input.value) {
-            this.setState({ todos: [...this.state.todos, {text: this.input.value, completed: false}] });
-            this.input.value = '';
+            this.props.addTodo(
+                {
+                    text: this.input.value,
+                    completed: false
+                });
+                this.input.value = '';
         }
     }
 
-    onCompleted(index){
-        let todos = this.state.todos;
-        todos[index].completed = !todos[index].completed;       
-        this.setState({todos: [...todos]});
+    onCompleted(index) {
+        this.props.completeTodo(index);
     }
 
     render() {
         return (
             <div>
-                <form>
+                <div>
                     <input type="text" ref={node => { this.input = node }} />
                     <button onClick={this.onAdd}>Add</button>
-                </form>
-                <div className="todos">
-                    {this.state.todos.map((todo, index) => {
-                        return (
-                        <div key={index} style={{textDecoration:todo.completed? 'line-through' : 'none'}}>
-                            <input 
-                            type="checkbox" 
-                            checked={todo.completed} 
-                            onClick={()=>this.onCompleted(index)}/>
-                            {todo.text}
-                        </div>)
-                    })}
                 </div>
+                <ToDoList todos={this.props.todos} onCompleted={this.onCompleted} />
             </div>);
     }
 }
 
-export default ToDo;
+const mapStateToPros = (state) => { return { todos: state.todos } };
+const mapDispatchToProps = (dispatch => {
+    return {
+        addTodo: (todo) => { dispatch(addTodo(todo)); },
+        completeTodo: (index) => { dispatch(completeTodo(index)) }
+    }
+})
+
+export default connect(mapStateToPros, mapDispatchToProps)(ToDo);
